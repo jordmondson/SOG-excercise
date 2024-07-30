@@ -1,11 +1,14 @@
 <?php
+$queries = array();
+parse_str($_SERVER['QUERY_STRING'], $queries);
+$location = urldecode($queries['location']);
 
 $db = new PDO('sqlite:FPA_FOD_20170508.sqlite');
 
-$sql = "SELECT DISTINCT NWCG_REPORTING_UNIT_NAME FROM Fires";
-
+$sql = "SELECT FPA_ID, FIRE_NAME, DISCOVERY_DATE FROM Fires WHERE NWCG_REPORTING_UNIT_NAME = ?";
 $stmt = $db->prepare($sql);
-$stmt->execute();
+$stmt->execute([$location]);
+
 ?>
 
 <!DOCTYPE html>
@@ -21,15 +24,11 @@ $stmt->execute();
 
 <body>
     <div id="limited-width">
-        <ol>
+        <ul>
             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
-                <li>
-                    <a href="/location.php?location=<?php echo urlencode($row['NWCG_REPORTING_UNIT_NAME']); ?> ">
-                        <?php echo $row['NWCG_REPORTING_UNIT_NAME']; ?>
-                    </a>
-                </li>
+                <li><?php echo sprintf('%s: %s at %s', $row['FPA_ID'], $row['FIRE_NAME'], $row['DISCOVERY_DATE']) ?> </li>
             <?php } ?>
-        </ol>
+        </ul>
     </div>
 </body>
 

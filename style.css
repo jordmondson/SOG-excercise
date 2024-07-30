@@ -1,0 +1,16 @@
+* {
+    font-family: Sans-Serif
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+body {
+    margin: 30px 50px;
+}
+
+#limited-width {
+    max-width: 800px;
+    overflow: wrap;
+}
